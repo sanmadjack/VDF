@@ -24,6 +24,9 @@ namespace VDF {
             String line = read.Dequeue();
             MatchCollection matches = name_value_regex.Matches(line);
 
+            if (string.IsNullOrWhiteSpace(line.TrimEnd('}')))
+                return;
+
             if (matches.Count == 0) {
                 throw new Exception("WHT THE HELL");
             }
@@ -43,6 +46,9 @@ namespace VDF {
                     if (ele.Ready) {
                         Children.Add(ele.Name, ele);
                     }
+                    if (read.Count == 0 && line == "{")
+                        break;
+
                     line = read.Peek();
                     if (close_regex.IsMatch(line)) {
                         read.Dequeue();
